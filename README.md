@@ -1,2 +1,2 @@
 
-![KinopoiskApi1](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/d3680006-0e5a-481f-a30c-6f058676ee60)
+![KinopoiskApi1](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/a2de0bf9-d6e2-4695-a6ea-8376019c6614)
