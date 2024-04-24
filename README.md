@@ -30,17 +30,25 @@
 ### Поиск
 В поиске хранятся раннее введенные запросы (20 штук). 
 Историю поиска можно очистить как полностью, нажав соответствующую кнопку, так и по одному запросу, свайпнув влево.
-![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/fcf3765a-48e0-4266-af47-31b5d3f320b8)
+<p align="center">
+  <img src="https://github.com/AlievIsa/KinopoiskApi/assets/91617416/fcf3765a-48e0-4266-af47-31b5d3f320b8" alt="История поиска">
+</p>
 
 Также история поиска мэтчится с введеным в данный момент запросом.
 Когда вводится запрос, начинают подгружаться подходящие фильмы с задержкой в полсекунды.
 Чтобы отобразился весь список фильмов, необходимо совершить поиск.
-![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/70056332-79cd-4af5-a528-f6f4908cda4a)
+<p align="center">
+  <img src="https://github.com/AlievIsa/KinopoiskApi/assets/91617416/70056332-79cd-4af5-a528-f6f4908cda4a" alt="Страница с фильмами по названию">
+</p>
 
 ### Фильмы по поиску
 Так выглядит страница с фильмами по названию.
-![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/91c1084a-ae47-4f26-a6f2-d077c80ac2b4)
+<p align="center">
+  <img src="https://github.com/AlievIsa/KinopoiskApi/assets/91617416/91c1084a-ae47-4f26-a6f2-d077c80ac2b4" alt="Страница фильма">
+</p>
 
 ### Экран фильма
 Можно перейти на страницу фильма, но к сожалению разработка данной страницы не была завершена.
-![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/f52b8ba6-1d1e-42c3-8486-73e2b3e68419)
+<p align="center">
+  <img src="https://github.com/AlievIsa/KinopoiskApi/assets/91617416/f52b8ba6-1d1e-42c3-8486-73e2b3e68419" alt="Страница фильма">
+</p>
