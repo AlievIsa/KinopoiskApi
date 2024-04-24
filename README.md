@@ -6,7 +6,8 @@
 
 ![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/91c1084a-ae47-4f26-a6f2-d077c80ac2b4)
 
-![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/ca05cf76-f38a-4256-9cf3-fd1daf7807e9)
+![image](https://github.com/AlievIsa/KinopoiskApi/assets/91617416/f52b8ba6-1d1e-42c3-8486-73e2b3e68419)
+
 
 
 
