@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,12 +27,14 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository
 ): ViewModel() {
 
-    private val _homeUIState = MutableStateFlow(HomeUIState())
-    val homeUIState = _homeUIState.asStateFlow()
+//    private val _homeUIState = MutableStateFlow(HomeUIState())
+//    val homeUIState = _homeUIState.asStateFlow()
 
     private val _searchText = MutableStateFlow("")
+    val searchText = _searchText.asStateFlow()
 
     private val _isSearching = MutableStateFlow(false)
+    val isSearching = _isSearching.asStateFlow()
 
     private val _searchQueryHistory: MutableStateFlow<List<SearchQuery>> = MutableStateFlow(emptyList())
     val searchQueryHistory = _searchQueryHistory.asStateFlow()
@@ -67,16 +68,10 @@ class HomeViewModel @Inject constructor(
 
     fun onSearchTextChange(text: String) {
         _searchText.value = text
-        _homeUIState.update {
-            it.copy(searchText = text)
-        }
     }
 
     fun onSearchBarActiveChange(isSearching: Boolean) {
         _isSearching.value = isSearching
-        _homeUIState.update {
-            it.copy(isSearching = isSearching)
-        }
         if (!_isSearching.value) {
             onSearchTextChange(_searchText.value)
         }
@@ -107,8 +102,8 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    data class HomeUIState(
-        val searchText: String = "",
-        val isSearching: Boolean = false
-    )
+//    data class HomeUIState(
+//        val searchText: String = "",
+//        val isSearching: Boolean = false
+//    )
 }
