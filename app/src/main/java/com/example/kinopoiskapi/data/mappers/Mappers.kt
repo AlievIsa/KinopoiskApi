@@ -16,9 +16,10 @@ import com.example.kinopoiskapi.domain.Rating
 import com.example.kinopoiskapi.domain.SearchQuery
 import com.example.kinopoiskapi.domain.Votes
 
-fun MovieDto.toMovieEntity(): MovieEntity {
+fun MovieDto.toMovieEntity(query: String): MovieEntity {
     return MovieEntity(
         dtoId = id,
+        query = query,
         name = name,
         type = type,
         typeNumber = typeNumber,

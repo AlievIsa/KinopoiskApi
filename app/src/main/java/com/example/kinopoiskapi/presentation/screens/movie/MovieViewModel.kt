@@ -3,7 +3,6 @@ package com.example.kinopoiskapi.presentation.screens.movie
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kinopoiskapi.data.mappers.toMovie
 import com.example.kinopoiskapi.domain.Movie
 import com.example.kinopoiskapi.domain.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,7 @@ class MovieViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _movie.value = repository.getMovieById(movieId).toMovie()
+            _movie.value = repository.getMovieById(movieId)
         }
     }
 }

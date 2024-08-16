@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.example.kinopoiskapi.data.mappers.toMovie
 import com.example.kinopoiskapi.data.mappers.toSearchQuery
 import com.example.kinopoiskapi.domain.Movie
 import com.example.kinopoiskapi.domain.Repository
@@ -22,6 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val SEARCH_RESULT_AMOUNT = 10
+private const val SEARCH_QUERY_LIST_SIZE = 5
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -48,7 +47,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _searchText.debounce(500L)
                 .collectLatest { query ->
-                    repository.getMovieFlowPagingData(query).map { it.map { it.toMovie() } }
+                    repository.getMovieFlowPagingData(query)
                         .cachedIn(viewModelScope)
                         .collectLatest {
                             _moviePagingFlow.value = it
@@ -63,6 +62,7 @@ class HomeViewModel @Inject constructor(
                     }
             }
         }
+        _moviePagingFlow
     }
 
     fun onSearchTextChange(text: String) {
@@ -84,7 +84,7 @@ class HomeViewModel @Inject constructor(
 
     private fun upsertSearchQuery(query: String) = viewModelScope.launch {
         if (!_searchQueryHistory.value.any { it.text == query }) {
-            if (_searchQueryHistory.value.size == 20) {
+            if (_searchQueryHistory.value.size == SEARCH_QUERY_LIST_SIZE) {
                 repository.deleteSearchQuery(_searchQueryHistory.value.last())
             }
             repository.upsertSearchQuery(query)

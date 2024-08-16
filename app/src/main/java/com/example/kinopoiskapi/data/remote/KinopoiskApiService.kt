@@ -1,5 +1,6 @@
 package com.example.kinopoiskapi.data.remote
 
+import com.example.kinopoiskapi.domain.NetworkError
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -42,7 +43,7 @@ class KinopoiskApiService(private val okHttpClient: OkHttpClient, private val ap
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     if (!response.isSuccessful) {
-                        continuation.resumeWithException(IOException("Failed to fetch movies: $response"))
+                        continuation.resumeWithException(NetworkError.HttpError(response.code, response.message))
                         return
                     }
 
@@ -52,15 +53,15 @@ class KinopoiskApiService(private val okHttpClient: OkHttpClient, private val ap
                         if (moviesResponse != null) {
                             continuation.resume(moviesResponse)
                         } else {
-                            continuation.resumeWithException(IOException("Failed to parse movies: $response"))
+                            continuation.resumeWithException(NetworkError.UnknownError("Failed to parse movies"))
                         }
                     } else {
-                        continuation.resumeWithException(IOException("Empty response body"))
+                        continuation.resumeWithException(NetworkError.UnknownError("Empty response body"))
                     }
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(e)
+                    continuation.resumeWithException(NetworkError.NoInternetConnection())
                 }
             })
         }

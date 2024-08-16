@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.kinopoiskapi.domain.NetworkError
 import com.example.kinopoiskapi.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -155,10 +156,17 @@ fun HomeScreen(
       }
     ) {
         LaunchedEffect(key1 = movies.loadState) {
-            if (movies.loadState.refresh is LoadState.Error) {
+            val loadState = movies.loadState.refresh
+            if (loadState is LoadState.Error) {
+                val errorMessage = when (val error = loadState.error) {
+                    is NetworkError.NoInternetConnection -> "No internet connection.\nPlease check your network."
+                    is NetworkError.HttpError -> "Server error ${error.code}: ${error.message}"
+                    is NetworkError.UnknownError -> "Unexpected error: ${error.message}"
+                    else -> "Unknown error occurred."
+                }
                 Toast.makeText(
                     context,
-                    "Error" + (movies.loadState.refresh as LoadState.Error).error.message,
+                    errorMessage,
                     Toast.LENGTH_LONG
                 ).show()
             }

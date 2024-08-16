@@ -10,8 +10,7 @@ import com.example.kinopoiskapi.data.local.KinopoiskDatabase
 import com.example.kinopoiskapi.data.local.MovieEntity
 import com.example.kinopoiskapi.data.local.RemoteKey
 import com.example.kinopoiskapi.data.mappers.toMovieEntity
-import retrofit2.HttpException
-import java.io.IOException
+import com.example.kinopoiskapi.domain.NetworkError
 
 @OptIn(ExperimentalPagingApi::class)
 class MovieRemoteMediator(
@@ -57,6 +56,8 @@ class MovieRemoteMediator(
                 limit = state.config.pageSize
             )
 
+            Log.d("Check", "$response")
+
             if (response.docs.isEmpty() && loadKey == 1) {
                 return MediatorResult.Success(
                     endOfPaginationReached = true
@@ -66,11 +67,15 @@ class MovieRemoteMediator(
             kinopoiskDb.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     remoteKeyDao.deleteAll()
-                    movieDao.deleteAll()
+                    movieDao.deleteAllByQuery(query)
+                    movieDao.deleteUnnecessary()
                 }
 
                 remoteKeyDao.upsert(RemoteKey(query, response.page + 1))
-                val movieEntities = response.docs.map { it.toMovieEntity() }
+                val movieEntities = response.docs.map {
+                    Log.d("Check", "$it")
+                    it.toMovieEntity(query)
+                }
                 kinopoiskDb.movieDao.upsertAll(movieEntities)
 
                 movieEntities.forEach {
@@ -83,10 +88,12 @@ class MovieRemoteMediator(
             MediatorResult.Success(
                 endOfPaginationReached = response.page == response.pages
             )
-        } catch (e: IOException) {
+            } catch (e: NetworkError.NoInternetConnection) {
             MediatorResult.Error(e)
-        } catch (e: HttpException) {
+        } catch (e: NetworkError.HttpError) {
             MediatorResult.Error(e)
+        } catch (e: Exception) {
+            MediatorResult.Error(NetworkError.UnknownError(e.message ?: "Unknown error"))
         }
     }
 }

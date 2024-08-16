@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [MovieEntity::class, RemoteKey::class, SearchQueryEntity::class],
-    version = 4
+    version = 6
 )
 abstract class KinopoiskDatabase: RoomDatabase() {
 
