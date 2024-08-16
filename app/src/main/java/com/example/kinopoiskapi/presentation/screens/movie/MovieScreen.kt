@@ -47,7 +47,7 @@ fun MovieScreen(
                     Text(
                         fontSize = 16.sp,
                         maxLines = 1,
-                        text = movie.name,
+                        text = movie.name ?: "<Без названия>",
                         fontWeight = FontWeight.Bold
                     )
                 },

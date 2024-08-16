@@ -54,7 +54,7 @@ fun MovieItem(
             ) {
                 Row {
                     Text(
-                        text = movie.name,
+                        text = movie.name ?: "<Без названия>",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         maxLines = 2,

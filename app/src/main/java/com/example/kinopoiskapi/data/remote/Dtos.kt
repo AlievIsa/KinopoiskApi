@@ -10,9 +10,9 @@ data class MoviesResponse(
 
 data class MovieDto(
     val id: Int,
-    val name: String,
-    val type: String,
-    val typeNumber: Int,
+    val name: String?,
+    val type: String?,
+    val typeNumber: Int?,
     val description: String?,
     val shortDescription: String?,
     val year: Int?,
@@ -21,17 +21,17 @@ data class MovieDto(
     val logo: ImageDto?,
     val poster: ImageDto?,
     val backdrop: ImageDto?,
-    val isSeries: Boolean,
+    val isSeries: Boolean?,
     val rating: RatingDto?,
     val votes: VotesDto?,
-    val genres: List<GenreDto>,
-    val countries: List<CountryDto>
+    val genres: List<GenreDto>?,
+    val countries: List<CountryDto>?
 ) {
     val firstGenre: String?
-        get() = genres.firstOrNull()?.name
+        get() = genres?.firstOrNull()?.name
 
     val firstCountry: String?
-        get() = countries.firstOrNull()?.name
+        get() = countries?.firstOrNull()?.name
 }
 
 data class ImageDto(
