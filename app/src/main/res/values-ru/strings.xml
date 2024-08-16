@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KinopoiskApi</string>
+    <string name="type_name">Введите название</string>
+    <string name="search_icon">Поиск</string>
+    <string name="close_icon">Зыкрыть</string>
+    <string name="filter_icon">Фильтр</string>
+    <string name="search_history">История поиска:</string>
+    <string name="delete_all">Очистить</string>
+    <string name="no_result">Нет результата</string>
+    <string name="no_internet_connection">Нет подключения к интернету.\nПроверьте свою сеть.</string>
+    <string name="server_error">Ошибка сервера %1$s: %2$s</string>
+    <string name="unexpected_error">Ошибка: %1$s</string>
+    <string name="unknown_error_occurred">Неизвестная ошибка.</string>
+</resources>

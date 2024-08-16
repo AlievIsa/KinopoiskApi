@@ -35,12 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.kinopoiskapi.R
 import com.example.kinopoiskapi.domain.NetworkError
 import com.example.kinopoiskapi.presentation.navigation.Screen
 
@@ -75,10 +77,13 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 4.dp),
                 placeholder = {
-                    Text("Введите название")
+                    Text(stringResource(R.string.type_name))
                 },
                 leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(R.string.search_icon)
+                    )
                 },
                 trailingIcon = {
                     if (isSearching) {
@@ -90,13 +95,13 @@ fun HomeScreen(
                                     homeViewModel.onSearchBarActiveChange(false)
                             },
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Close Icon"
+                            contentDescription = stringResource(R.string.close_icon)
                         )
                     } else {
                         Icon(
                             modifier = Modifier.clickable {},
                             imageVector = Icons.Default.Tune,
-                            contentDescription = "Filter Icon"
+                            contentDescription = stringResource(R.string.filter_icon)
                         )
                     }
                 },
@@ -115,12 +120,12 @@ fun HomeScreen(
                                         .fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Text(text = "История поиска:")
+                                    Text(text = stringResource(R.string.search_history))
                                     Text(
                                         modifier = Modifier.clickable {
                                             homeViewModel.onDeleteAllSearchQueriesClick()
                                         },
-                                        text = "Очистить",
+                                        text = stringResource(R.string.delete_all),
                                         color = Color.Gray,
                                         fontSize = 14.sp
                                     )
@@ -172,7 +177,7 @@ fun HomeScreen(
                                         .fillMaxWidth()
                                         .align(Alignment.CenterHorizontally)
                                         .padding(top = 24.dp),
-                                    text = "Нет подходящих результатов"
+                                    text = stringResource(R.string.no_result)
                                 )
                             }
                         }
@@ -185,10 +190,17 @@ fun HomeScreen(
             val loadState = movies.loadState.refresh
             if (loadState is LoadState.Error) {
                 val errorMessage = when (val error = loadState.error) {
-                    is NetworkError.NoInternetConnection -> "No internet connection.\nPlease check your network."
-                    is NetworkError.HttpError -> "Server error ${error.code}: ${error.message}"
-                    is NetworkError.UnknownError -> "Unexpected error: ${error.message}"
-                    else -> "Unknown error occurred."
+                    is NetworkError.NoInternetConnection -> context.getString(R.string.no_internet_connection)
+                    is NetworkError.HttpError -> context.getString(
+                        R.string.server_error,
+                        error.code.toString(),
+                        error.message
+                    )
+                    is NetworkError.UnknownError -> context.getString(
+                        R.string.unexpected_error,
+                        error.message
+                    )
+                    else -> context.getString(R.string.unknown_error_occurred)
                 }
                 Toast.makeText(
                     context,
