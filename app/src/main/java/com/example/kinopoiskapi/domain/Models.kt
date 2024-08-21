@@ -46,3 +46,8 @@ data class SearchQuery(
     val id: Int,
     val text: String
 )
+
+data class Genre(
+    val id: Int,
+    val name: String?
+)

@@ -12,4 +12,20 @@
     <string name="server_error">Ошибка сервера %1$s: %2$s</string>
     <string name="unexpected_error">Ошибка: %1$s</string>
     <string name="unknown_error_occurred">Неизвестная ошибка.</string>
+    <string name="search_with_filters">Поиск по фильтрам</string>
+    <string name="back_icon">Назад</string>
+    <string name="search">Поиск</string>
+    <string name="refresh_filters">Сбросить фильтры</string>
+    <string name="any_genre">Любой жанр</string>
+    <string name="any_year">Любой год</string>
+    <string name="rating">Рейтинг</string>
+    <string name="rating_from_to">от %1$s до %2$s</string>
+    <string name="any">все</string>
+    <string name="movie">фильмы</string>
+    <string name="serial">сериалы</string>
+    <string name="any_type">Любой %1$s</string>
+    <string name="year">год</string>
+    <string name="genre">жанр</string>
+    <string name="no_matter">Неважно</string>
+    <string name="temp_filters">Фильтры: %1$s</string>
 </resources>

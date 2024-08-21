@@ -1,9 +1,10 @@
-package com.example.kinopoiskapi.data.local
+package com.example.kinopoiskapi.data.local.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.kinopoiskapi.data.local.SearchQueryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,4 +21,5 @@ interface SearchQueryDao {
 
     @Query("DELETE FROM searchqueryentity")
     suspend fun deleteAll()
+
 }

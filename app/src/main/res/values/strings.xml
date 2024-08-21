@@ -11,4 +11,20 @@
     <string name="server_error">Server error %1$s: %2$s</string>
     <string name="unexpected_error">Unexpected error: %1$s</string>
     <string name="unknown_error_occurred">Unknown error occurred.</string>
+    <string name="search_with_filters">Search with filters</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="search">Search</string>
+    <string name="refresh_filters">Resresh filters</string>
+    <string name="any_genre">Any genre</string>
+    <string name="any_year">Any year</string>
+    <string name="rating">Rating</string>
+    <string name="rating_from_to">from %1$s to %2$s</string>
+    <string name="any">any</string>
+    <string name="movie">movie</string>
+    <string name="serial">serial</string>
+    <string name="any_type">Any %1$s</string>
+    <string name="year">year</string>
+    <string name="genre">genre</string>
+    <string name="no_matter">No matter</string>
+    <string name="temp_filters">Filters: %1$s</string>
 </resources>

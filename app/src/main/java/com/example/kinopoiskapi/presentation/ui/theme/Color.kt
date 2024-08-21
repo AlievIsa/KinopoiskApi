@@ -17,5 +17,6 @@ val White80 = Color(0xFFFFFFFF)
 val Orange40 = Color(0xFFE99126)
 val OrangeGrey40 = Color(0xFFCD853F)
 val White40 = Color(0xFFFAFAFA)
+val OrangeLight = Color(0xFFFBDEC1)
 
 val Green = Color(0xFF51AF69)

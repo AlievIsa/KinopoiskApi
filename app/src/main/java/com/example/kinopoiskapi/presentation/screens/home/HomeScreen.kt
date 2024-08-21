@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,8 +21,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,15 +45,17 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.kinopoiskapi.R
 import com.example.kinopoiskapi.domain.NetworkError
 import com.example.kinopoiskapi.presentation.navigation.Screen
+import com.example.kinopoiskapi.presentation.screens.home.items.MovieItem
+import com.example.kinopoiskapi.presentation.screens.home.items.SearchMovieItem
+import com.example.kinopoiskapi.presentation.screens.home.items.SearchQueryItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(navController.getBackStackEntry(Screen.Home.route))
 ) {
     val context = LocalContext.current
-//    val homeUIState by homeViewModel.homeUIState.collectAsState()
     val searchText by homeViewModel.searchText.collectAsState()
     val isSearching by homeViewModel.isSearching.collectAsState()
     val searchQueryHistory by homeViewModel.searchQueryHistory.collectAsState()
@@ -62,49 +64,63 @@ fun HomeScreen(
     var isRefreshingByPullUp by remember {
         mutableStateOf(false)
     }
+    val filters by homeViewModel.filters.collectAsState()
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+//        modifier = Modifier.pullToRefresh(
+//            state = pullToRefreshState,
+//            isRefreshing = isRefreshingByPullUp,
+//            onRefresh = {
+//                movies.refresh()
+//            }
+//        ),
         topBar = {
             SearchBar(
-                query = searchText,
-                onQueryChange = homeViewModel::onSearchTextChange,
-                onSearch = { homeViewModel.onSearchClicked() },
-                active = isSearching,
-                onActiveChange = { homeViewModel.onSearchBarActiveChange(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp),
-                placeholder = {
-                    Text(stringResource(R.string.type_name))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(R.string.search_icon)
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = searchText,
+                        onQueryChange = homeViewModel::onSearchTextChange,
+                        onSearch = { homeViewModel.onSearchClicked() },
+                        expanded = isSearching,
+                        onExpandedChange = { homeViewModel.onSearchBarActiveChange(it) },
+                        placeholder = {
+                            Text(stringResource(R.string.type_name))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = stringResource(R.string.search_icon)
+                            )
+                        },
+                        trailingIcon = {
+                            if (isSearching) {
+                                Icon(
+                                    modifier = Modifier.clickable {
+                                        if (searchText.isNotEmpty())
+                                            homeViewModel.onSearchTextChange("")
+                                        else
+                                            homeViewModel.onSearchBarActiveChange(false)
+                                    },
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.close_icon)
+                                )
+                            } else if (searchText.isEmpty()) {
+                                Icon(
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(Screen.Filter.route)
+                                    },
+                                    imageVector = Icons.Default.Tune,
+                                    contentDescription = stringResource(R.string.filter_icon)
+                                )
+                            }
+                        }
                     )
                 },
-                trailingIcon = {
-                    if (isSearching) {
-                        Icon(
-                            modifier = Modifier.clickable {
-                                if (searchText.isNotEmpty())
-                                    homeViewModel.onSearchTextChange("")
-                                else
-                                    homeViewModel.onSearchBarActiveChange(false)
-                            },
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(R.string.close_icon)
-                        )
-                    } else {
-                        Icon(
-                            modifier = Modifier.clickable {},
-                            imageVector = Icons.Default.Tune,
-                            contentDescription = stringResource(R.string.filter_icon)
-                        )
-                    }
-                },
+                expanded = isSearching,
+                onExpandedChange = { homeViewModel.onSearchBarActiveChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp)
             ) {
                 LazyColumn(
                     modifier = Modifier
@@ -184,8 +200,127 @@ fun HomeScreen(
                     }
                 }
             }
+//            SearchBar(
+//                query = searchText,
+//                onQueryChange = homeViewModel::onSearchTextChange,
+//                onSearch = { homeViewModel.onSearchClicked() },
+//                active = isSearching,
+//                onActiveChange = { homeViewModel.onSearchBarActiveChange(it) },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 4.dp),
+//                placeholder = {
+//                    Text(stringResource(R.string.type_name))
+//                },
+//                leadingIcon = {
+//                    Icon(
+//                        imageVector = Icons.Default.Search,
+//                        contentDescription = stringResource(R.string.search_icon)
+//                    )
+//                },
+//                trailingIcon = {
+//                    if (isSearching) {
+//                        Icon(
+//                            modifier = Modifier.clickable {
+//                                if (searchText.isNotEmpty())
+//                                    homeViewModel.onSearchTextChange("")
+//                                else
+//                                    homeViewModel.onSearchBarActiveChange(false)
+//                            },
+//                            imageVector = Icons.Default.Close,
+//                            contentDescription = stringResource(R.string.close_icon)
+//                        )
+//                    } else if (searchText.isEmpty()) {
+//                        Icon(
+//                            modifier = Modifier.clickable {
+//                                navController.navigate(Screen.Filter.route)
+//                            },
+//                            imageVector = Icons.Default.Tune,
+//                            contentDescription = stringResource(R.string.filter_icon)
+//                        )
+//                    }
+//                }
+//            ) {
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(Color.White)
+//                ) {
+//                    if (searchQueryHistory.isNotEmpty()) {
+//                        if (searchText.isBlank()) {
+//                            item {
+//                                Row(
+//                                    modifier = Modifier
+//                                        .padding(8.dp)
+//                                        .fillMaxWidth(),
+//                                    horizontalArrangement = Arrangement.SpaceBetween
+//                                ) {
+//                                    Text(text = stringResource(R.string.search_history))
+//                                    Text(
+//                                        modifier = Modifier.clickable {
+//                                            homeViewModel.onDeleteAllSearchQueriesClick()
+//                                        },
+//                                        text = stringResource(R.string.delete_all),
+//                                        color = Color.Gray,
+//                                        fontSize = 14.sp
+//                                    )
+//                                }
+//                            }
+//                        }
+//                        items(
+//                            items = searchQueryHistory,
+//                            key = { item -> item.id }) { searchQuery ->
+//                            SearchQueryItem(
+//                                searchQuery,
+//                                homeViewModel::onSearchTextChange,
+//                                homeViewModel::onSearchClicked,
+//                                homeViewModel::onDeleteSearchQuery
+//                            )
+//                        }
+//                    }
+//                    if (movies.loadState.refresh is LoadState.Loading) {
+//                        item {
+//                            Box(modifier = Modifier.fillMaxWidth()) {
+//                                CircularProgressIndicator(
+//                                    modifier = Modifier
+//                                        .align(Alignment.Center)
+//                                        .padding(16.dp)
+//                                )
+//                            }
+//                        }
+//                    } else {
+//                        if (movies.itemCount != 0) {
+//                            if (searchText.isNotBlank()) {
+//                                items(count = movies.itemCount) { index ->
+//                                    if (index <= homeViewModel.searchMoviesResultAmount) {
+//                                        val movie = movies[index]
+//                                        if (movie != null) {
+//                                            Box(modifier = Modifier.clickable {
+//                                                navController.navigate("${Screen.Movie.route}/${movie.id}")
+//                                            }
+//                                            ) {
+//                                                SearchMovieItem(movie = movie)
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        } else {
+//                            item {
+//                                Text(
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .align(Alignment.CenterHorizontally)
+//                                        .padding(top = 24.dp),
+//                                    text = stringResource(R.string.no_result)
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
-    ) {
+    ) { paddingValue ->
         LaunchedEffect(movies.loadState) {
             val loadState = movies.loadState.refresh
             if (loadState is LoadState.Error) {
@@ -211,59 +346,58 @@ fun HomeScreen(
         }
 
         Box(
+//            state = pullToRefreshState,
+//            isRefreshing = isRefreshingByPullUp,
+//            onRefresh = {
+//                isRefreshingByPullUp = true
+//                movies.refresh()
+//                isRefreshingByPullUp = false
+//            },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(paddingValue)
         ) {
-            if (pullToRefreshState.isRefreshing) {
-                LaunchedEffect(true) {
-                    isRefreshingByPullUp = true
-                    movies.refresh()
-                }
-            }
 
             if (movies.loadState.refresh is LoadState.Loading) {
-                if (isRefreshingByPullUp) {
-                    pullToRefreshState.startRefresh()
-                } else {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
             } else {
-                pullToRefreshState.endRefresh()
-                isRefreshingByPullUp = false
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 4.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Column(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    items(count = movies.itemCount) { index ->
-                        val movie = movies[index]
-                        if (movie != null) {
-                            Box(modifier = Modifier.clickable {
-                                navController.navigate("${Screen.Movie.route}/${movie.id}")
-                            }
-                            ) {
-                                MovieItem(movie = movie)
+                    if (filters != null) {
+                        Text(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            text = stringResource(R.string.temp_filters, filters!!)
+                        )
+                    }
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 4.dp),
+                        verticalArrangement = Arrangement.spacedBy(0.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        items(count = movies.itemCount) { index ->
+                            val movie = movies[index]
+                            if (movie != null) {
+                                Box(modifier = Modifier.clickable {
+                                    navController.navigate("${Screen.Movie.route}/${movie.id}")
+                                }
+                                ) {
+                                    MovieItem(movie = movie)
+                                }
                             }
                         }
-                    }
-                    item {
-                        if (movies.loadState.append is LoadState.Loading) {
-                            CircularProgressIndicator()
+                        item {
+                            if (movies.loadState.append is LoadState.Loading) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
                 }
             }
-
-            PullToRefreshContainer(
-                state = pullToRefreshState,
-                modifier = Modifier
-                    .align(Alignment.TopCenter),
-            )
         }
     }
 }

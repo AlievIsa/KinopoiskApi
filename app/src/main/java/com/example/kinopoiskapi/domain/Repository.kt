@@ -7,6 +7,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.kinopoiskapi.data.local.KinopoiskDatabase
 import com.example.kinopoiskapi.data.local.SearchQueryEntity
+import com.example.kinopoiskapi.data.mappers.toGenre
+import com.example.kinopoiskapi.data.mappers.toGenreEntity
 import com.example.kinopoiskapi.data.mappers.toMovie
 import com.example.kinopoiskapi.data.mappers.toSearchQueryEntity
 import com.example.kinopoiskapi.data.remote.ApiService
@@ -20,11 +22,21 @@ class Repository(
     private val kinopoiskApi: ApiService
 ) {
 
-    fun getMovieFlowPagingData(query: String): Flow<PagingData<Movie>> {
+    fun getMovieFlowPagingData(
+        query: String,
+        type: Int,
+        year: String?,
+        rate: IntRange,
+        genre: String?
+    ): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator = MovieRemoteMediator(
                 query = query,
+                type = type,
+                year = year,
+                rate = rate,
+                genre = genre,
                 kinopoiskDb = kinopoiskDb,
                 kinopoiskApi = kinopoiskApi
             ),
@@ -32,6 +44,17 @@ class Repository(
                 kinopoiskDb.movieDao.pagingSource(query)
             }
         ).flow.map { it.map { it.toMovie() } }
+    }
+
+    suspend fun getGenres(): List<Genre> {
+        val genresFromDb = kinopoiskDb.genreDao.getGenres()
+        if (genresFromDb.isNotEmpty()) {
+            return genresFromDb.map { it.toGenre() }
+        } else {
+            val genresFromApi = kinopoiskApi.getGenres()
+            kinopoiskDb.genreDao.upsertGenres(genresFromApi.map { it.toGenreEntity() })
+        }
+        return genresFromDb.map { it.toGenre() }
     }
 
     suspend fun getMovieById(id: Int) = kinopoiskDb.movieDao.getMovieById(id).toMovie()

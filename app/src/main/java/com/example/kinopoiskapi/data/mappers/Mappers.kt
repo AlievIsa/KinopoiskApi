@@ -1,15 +1,18 @@
 package com.example.kinopoiskapi.data.mappers
 
 
+import com.example.kinopoiskapi.data.local.GenreEntity
 import com.example.kinopoiskapi.data.local.ImageEntity
 import com.example.kinopoiskapi.data.local.MovieEntity
 import com.example.kinopoiskapi.data.local.RatingEntity
 import com.example.kinopoiskapi.data.local.SearchQueryEntity
 import com.example.kinopoiskapi.data.local.VotesEntity
+import com.example.kinopoiskapi.data.remote.GenreDto
 import com.example.kinopoiskapi.data.remote.ImageDto
 import com.example.kinopoiskapi.data.remote.MovieDto
 import com.example.kinopoiskapi.data.remote.RatingDto
 import com.example.kinopoiskapi.data.remote.VotesDto
+import com.example.kinopoiskapi.domain.Genre
 import com.example.kinopoiskapi.domain.Image
 import com.example.kinopoiskapi.domain.Movie
 import com.example.kinopoiskapi.domain.Rating
@@ -127,5 +130,18 @@ fun SearchQuery.toSearchQueryEntity(): SearchQueryEntity {
     return SearchQueryEntity(
         id = id,
         text = text
+    )
+}
+
+fun GenreDto.toGenreEntity(): GenreEntity {
+    return GenreEntity(
+        name = name
+    )
+}
+
+fun GenreEntity.toGenre(): Genre {
+    return Genre(
+        id = id,
+        name = name
     )
 }

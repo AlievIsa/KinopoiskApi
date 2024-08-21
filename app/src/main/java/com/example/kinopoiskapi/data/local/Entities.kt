@@ -62,3 +62,10 @@ data class SearchQueryEntity(
     val id: Int = 0,
     val text: String
 )
+
+@Entity
+data class GenreEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String?
+)

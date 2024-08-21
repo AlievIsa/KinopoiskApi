@@ -1,4 +1,4 @@
-package com.example.kinopoiskapi.presentation.screens.home
+package com.example.kinopoiskapi.presentation.screens.home.items
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,18 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.kinopoiskapi.domain.Image
 import com.example.kinopoiskapi.domain.Movie
-import com.example.kinopoiskapi.domain.Rating
 import com.example.kinopoiskapi.presentation.ui.theme.Green
-import com.example.kinopoiskapi.presentation.ui.theme.KinopoiskApiTheme
 
 @Composable
-fun MovieItem(
+fun SearchMovieItem(
     movie: Movie
 ) {
     Card(
@@ -40,7 +35,7 @@ fun MovieItem(
         Row(
             modifier = Modifier.padding(8.dp)
         ) {
-            Box(modifier = Modifier.width(80.dp).height(100.dp)) {
+            Box(modifier = Modifier.width(40.dp).height(50.dp)) {
                 movie.poster?.url?.let { imageUrl ->
                     AsyncImage(
                         model = imageUrl,
@@ -57,7 +52,7 @@ fun MovieItem(
                         text = movie.name ?: "<Без названия>",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
-                        maxLines = 2,
+                        maxLines = 1,
                         modifier = Modifier
                             .padding(bottom = 4.dp)
                             .weight(1f)
@@ -69,15 +64,6 @@ fun MovieItem(
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
-                }
-                movie.shortDescription?.let { description ->
-                    Text(
-                        text = description,
-                        maxLines = 2,
-                        style = MaterialTheme.typography.bodySmall,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
                 }
                 Row(modifier = Modifier.padding(top = 4.dp)) {
                     Text(
@@ -99,27 +85,5 @@ fun MovieItem(
                 }
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true, showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun MovieItemPreview() {
-    KinopoiskApiTheme {
-       MovieItem(
-            movie = Movie
-                (id = 1,
-                name = "Мстители: Война бесконечности",
-                poster = Image(
-                    url = "https://image.openmoviedb.com/kinopoisk-images/1773646/af92d310-4ae5-4daa-b42c-5bcc380c2e6e/orig"
-                ),
-                shortDescription = "Титан Танос вынашивает страшный план — угрозу всей Вселенной. Предпоследний фильм о суперкоманде Marvel",
-                rating = Rating(
-                    kp = 8.1
-                ),
-                country = "США",
-                genre = "Фантастика",
-                year = 2018
-            ))
     }
 }

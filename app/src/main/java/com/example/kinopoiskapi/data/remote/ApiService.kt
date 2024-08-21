@@ -5,8 +5,14 @@ interface ApiService {
     suspend fun getMoviesResponse(
         query: String,
         page: Int,
-        limit: Int
+        limit: Int,
+        type: Int,
+        year: String?,
+        rateRange: IntRange,
+        genre: String?
     ): MoviesResponse
+
+    suspend fun getGenres(): List<GenreDto>
 }
 
 

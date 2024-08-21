@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.kinopoiskapi.R
 import com.example.kinopoiskapi.domain.Movie
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +57,7 @@ fun MovieScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.back_icon)
                         )
                     }
                 }
@@ -66,7 +68,8 @@ fun MovieScreen(
         }) { paddingValues ->
         Box(
             modifier = Modifier
-                .padding(paddingValues).fillMaxWidth()
+                .padding(paddingValues)
+                .fillMaxWidth()
         ) {
             movie.logo?.url?.let { imageUrl ->
                 AsyncImage(

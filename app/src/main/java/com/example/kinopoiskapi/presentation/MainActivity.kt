@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kinopoiskapi.presentation.navigation.Screen
 import com.example.kinopoiskapi.presentation.screens.home.HomeScreen
+import com.example.kinopoiskapi.presentation.screens.home.filter.FilterScreen
 import com.example.kinopoiskapi.presentation.screens.movie.MovieScreen
 import com.example.kinopoiskapi.presentation.ui.theme.KinopoiskApiTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +40,9 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("id") { type = NavType.IntType })
                         ) {
                             MovieScreen(navController)
+                        }
+                        composable(Screen.Filter.route) {
+                            FilterScreen(navController)
                         }
                     }
                 }

@@ -15,6 +15,10 @@ import com.example.kinopoiskapi.domain.NetworkError
 @OptIn(ExperimentalPagingApi::class)
 class MovieRemoteMediator(
     private val query: String,
+    private val type: Int,
+    private val year: String?,
+    private val rate: IntRange,
+    private val genre: String?,
     private val kinopoiskDb: KinopoiskDatabase,
     private val kinopoiskApi: ApiService
 ): RemoteMediator<Int, MovieEntity>() {
@@ -53,10 +57,14 @@ class MovieRemoteMediator(
             val response = kinopoiskApi.getMoviesResponse(
                 query = query,
                 page = loadKey,
-                limit = state.config.pageSize
+                limit = state.config.pageSize,
+                type = type,
+                genre = genre,
+                year = year,
+                rateRange = rate
             )
 
-            Log.d("Check", "$response")
+//            Log.d("Check", "$response")
 
             if (response.docs.isEmpty() && loadKey == 1) {
                 return MediatorResult.Success(
@@ -78,11 +86,11 @@ class MovieRemoteMediator(
                 }
                 kinopoiskDb.movieDao.upsertAll(movieEntities)
 
-                movieEntities.forEach {
-                    Log.d("upsert", "id = ${it.id}\n" +
-                            "dtoId = ${it.dtoId}\n" +
-                            "name = ${it.name}\n")
-                }
+//                movieEntities.forEach {
+//                    Log.d("upsert", "id = ${it.id}\n" +
+//                            "dtoId = ${it.dtoId}\n" +
+//                            "name = ${it.name}\n")
+//                }
             }
 
             MediatorResult.Success(

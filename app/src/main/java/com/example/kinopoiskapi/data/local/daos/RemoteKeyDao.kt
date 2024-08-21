@@ -1,8 +1,9 @@
-package com.example.kinopoiskapi.data.local
+package com.example.kinopoiskapi.data.local.daos
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.kinopoiskapi.data.local.RemoteKey
 
 @Dao
 interface RemoteKeyDao {

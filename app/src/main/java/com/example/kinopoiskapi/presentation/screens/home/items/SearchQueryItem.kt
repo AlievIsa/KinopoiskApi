@@ -1,4 +1,4 @@
-package com.example.kinopoiskapi.presentation.screens.home
+package com.example.kinopoiskapi.presentation.screens.home.items
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
