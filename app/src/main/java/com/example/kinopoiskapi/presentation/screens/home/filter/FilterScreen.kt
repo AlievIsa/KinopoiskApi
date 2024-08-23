@@ -12,6 +12,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -25,10 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.SliderState
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,13 +39,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.kinopoiskapi.R
 import com.example.kinopoiskapi.presentation.navigation.Screen
 import com.example.kinopoiskapi.presentation.screens.home.HomeViewModel
+import com.example.kinopoiskapi.presentation.utils.SetStatusBarColor
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,12 +53,11 @@ fun FilterScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(navController.getBackStackEntry(Screen.Home.route))
 ) {
+    SetStatusBarColor(color = MaterialTheme.colorScheme.primary)
+
     val context = LocalContext.current
 
-    val typeOptions = mutableListOf(
-        stringResource(R.string.any),
-        stringResource(R.string.movie),
-        stringResource(R.string.serial)
+    val typeOptions = mutableListOf("Все", "Фильмы", "Сериалы"
     )
     var selectedTypeIndex by remember {
         mutableIntStateOf(homeViewModel.type.value)
@@ -84,15 +81,15 @@ fun FilterScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.search_with_filters))
+                    Text(text = "Поиск по фильтрам")
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(id = R.string.back_icon)
+                            contentDescription = "Назад"
                         )
                     }
                 }
@@ -110,7 +107,7 @@ fun FilterScreen(
                 if (genres.isEmpty()) {
                     Toast.makeText(
                         context,
-                        "Need internet connection to download genres",
+                        "Нужен интеренет для загрузки жанров",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -131,7 +128,7 @@ fun FilterScreen(
                             selected = selectedTypeIndex == index,
                             onClick = { selectedTypeIndex = index },
                             colors = SegmentedButtonDefaults.colors(
-                                activeContainerColor = MaterialTheme.colorScheme.primaryContainer
+                                activeContainerColor = MaterialTheme.colorScheme.secondary
                             ),
                             shape = SegmentedButtonDefaults.itemShape(
                                 index = index,
@@ -144,7 +141,7 @@ fun FilterScreen(
                 }
 
                 ChipComponent(
-                    selected = selectedGenre ?: stringResource(R.string.any_genre),
+                    selected = selectedGenre ?: "Любой жанр",
                     list = genres,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -154,7 +151,7 @@ fun FilterScreen(
                 }
 
                 ChipComponent(
-                    selected = selectedYear ?: stringResource(R.string.any_year),
+                    selected = selectedYear ?: "Любой год",
                     list = yearList,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -183,7 +180,7 @@ fun FilterScreen(
 
                         Text(
                             modifier = Modifier.align(Alignment.CenterStart),
-                            text = stringResource(R.string.rating)
+                            text = "Рейтинг"
                         )
 
                         val start = rateSliderPosition.start.toInt()
@@ -191,14 +188,9 @@ fun FilterScreen(
                         Text(
                             modifier = Modifier.align(Alignment.CenterEnd),
                             text = when {
-                                start == 0 && end == 10 ->
-                                    stringResource(id = R.string.no_matter)
-                                start == end -> start.toString()
-                                else -> stringResource(
-                                    R.string.rating_from_to,
-                                    start,
-                                    end
-                                )
+                                start == 0 && end == 10 -> "Неважно"
+                                start == end -> "$start"
+                                else -> "От $start до $end"
                             }
                         )
                     }
@@ -215,12 +207,12 @@ fun FilterScreen(
                         .padding(vertical = 8.dp),
                     onClick = {
                         selectedTypeIndex = 0
-                        selectedYear = null
-                        selectedGenre = null
+                        selectedGenre = "Любой жанр"
+                        selectedYear = "Любой год"
                         rateSliderPosition = 0..10
                     }
                 ) {
-                    Text(text = stringResource(R.string.refresh_filters))
+                    Text(text = "Сбросить фильры")
                 }
                 Button(
                     modifier = Modifier
@@ -237,7 +229,7 @@ fun FilterScreen(
                         navController.popBackStack()
                     }
                 ) {
-                    Text(text = stringResource(R.string.search))
+                    Text(text = "Поиск")
                 }
             }
         }

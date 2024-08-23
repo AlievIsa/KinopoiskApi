@@ -15,15 +15,22 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(
     private val repository: Repository,
     private val state: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
 
     private val movieId: Int = checkNotNull(state["id"])
     private val _movie: MutableStateFlow<Movie> = MutableStateFlow(Movie())
     val movie = _movie.asStateFlow()
 
+    private val _seasonsNum = MutableStateFlow<Int?>(null)
+    val seasonsNum = _seasonsNum.asStateFlow()
+
     init {
         viewModelScope.launch {
             _movie.value = repository.getMovieById(movieId)
         }
+    }
+
+    fun getSeasonsNum(serialId: Int) = viewModelScope.launch {
+        _seasonsNum.value = repository.getSeasonsNum(serialId)
     }
 }

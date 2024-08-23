@@ -147,4 +147,12 @@ class HomeViewModel @Inject constructor(
             _filters.value = newFilters.joinToString(", ")
         }
     }
+
+    fun clearFilters() {
+        _type.value = 0
+        _selectedGenre.value = null
+        _selectedYear.value = null
+        _rateRange.value = 0..10
+        _filters.value = null
+    }
 }
