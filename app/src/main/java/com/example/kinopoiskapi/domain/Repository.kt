@@ -57,6 +57,8 @@ class Repository(
         return genresFromDb.map { it.toGenre() }
     }
 
+    suspend fun getSeasonsNum(serialId: Int) = kinopoiskApi.getSeasonsNum(serialId).total
+
     suspend fun getMovieById(id: Int) = kinopoiskDb.movieDao.getMovieById(id).toMovie()
 
     suspend fun upsertSearchQuery(query: String) = kinopoiskDb.searchQueryDao.upsert(SearchQueryEntity(text = query))

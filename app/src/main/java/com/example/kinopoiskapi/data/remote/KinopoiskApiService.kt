@@ -20,6 +20,53 @@ import kotlin.coroutines.suspendCoroutine
 
 class KinopoiskApiService(private val okHttpClient: OkHttpClient, private val apiKey: String): ApiService {
 
+    private suspend inline fun <reified T> performRequest(
+        request: Request,
+        jsonAdapter: JsonAdapter<T>
+    ): T {
+        return suspendCoroutine { continuation ->
+            okHttpClient.newCall(request).enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    if (!response.isSuccessful) {
+                        continuation.resumeWithException(
+                            NetworkError.HttpError(response.code, response.message)
+                        )
+                        return
+                    }
+
+                    val body = response.body
+                    if (body != null) {
+                        val result = jsonAdapter.fromJson(body.source())
+                        if (result != null) {
+                            continuation.resume(result)
+                        } else {
+                            continuation.resumeWithException(
+                                NetworkError.UnknownError("Failed to parse response")
+                            )
+                        }
+                    } else {
+                        continuation.resumeWithException(
+                            NetworkError.UnknownError("Empty response body")
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call, e: IOException) {
+                    continuation.resumeWithException(NetworkError.NoInternetConnection())
+                }
+            })
+        }
+    }
+
+    private fun createRequest(url: String): Request {
+        return Request.Builder()
+            .url(url)
+            .get()
+            .addHeader("accept", "application/json")
+            .addHeader("X-API-KEY", apiKey)
+            .build()
+    }
+
     override suspend fun getMoviesResponse(
         query: String,
         page: Int,
@@ -65,80 +112,28 @@ class KinopoiskApiService(private val okHttpClient: OkHttpClient, private val ap
 
         Log.d("URL", url)
 
-        val request = Request.Builder()
-            .url(url)
-            .get()
-            .addHeader("accept", "application/json")
-            .addHeader("X-API-KEY", apiKey)
-            .build()
+        val request = createRequest(url)
+        val jsonAdapter: JsonAdapter<MoviesResponse> = Moshi.Builder().build()
+            .adapter(MoviesResponse::class.java)
 
-        return suspendCoroutine { continuation ->
-            okHttpClient.newCall(request).enqueue(object : Callback {
-                override fun onResponse(call: Call, response: Response) {
-                    if (!response.isSuccessful) {
-                        continuation.resumeWithException(NetworkError.HttpError(response.code, response.message))
-                        return
-                    }
-
-                    val body = response.body
-                    if (body != null) {
-                        val jsonAdapter: JsonAdapter<MoviesResponse> = Moshi.Builder().build()
-                            .adapter(Types.newParameterizedType(MoviesResponse::class.java))
-                        val moviesResponse = jsonAdapter.fromJson(body.source())
-                        if (moviesResponse != null) {
-                            continuation.resume(moviesResponse)
-                        } else {
-                            continuation.resumeWithException(NetworkError.UnknownError("Failed to parse movies"))
-                        }
-                    } else {
-                        continuation.resumeWithException(NetworkError.UnknownError("Empty response body"))
-                    }
-                }
-
-                override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(NetworkError.NoInternetConnection())
-                }
-            })
-        }
+        return performRequest(request, jsonAdapter)
     }
 
     override suspend fun getGenres(): List<GenreDto> {
         val url = "https://api.kinopoisk.dev/v1/movie/possible-values-by-field?field=genres.name"
-        val request = Request.Builder()
-            .url(url)
-            .get()
-            .addHeader("accept", "application/json")
-            .addHeader("X-API-KEY", apiKey)
-            .build()
+        val request = createRequest(url)
+        val jsonAdapter: JsonAdapter<List<GenreDto>> = Moshi.Builder().build()
+            .adapter(Types.newParameterizedType(List::class.java, GenreDto::class.java))
 
-        return suspendCoroutine { continuation ->
-            okHttpClient.newCall(request).enqueue(object: Callback {
-                override fun onResponse(call: Call, response: Response) {
-                    if (!response.isSuccessful) {
-                        continuation.resumeWithException(NetworkError.HttpError(response.code, response.message))
-                        return
-                    }
+        return performRequest(request, jsonAdapter)
+    }
 
-                    val body = response.body
+    override suspend fun getSeasonsNum(serialId: Int): SeasonResponse {
+        val url = "https://api.kinopoisk.dev/v1.4/season?page=1&limit=1&movieId=$serialId"
+        val request = createRequest(url)
+        val jsonAdapter: JsonAdapter<SeasonResponse> = Moshi.Builder().build()
+            .adapter(Types.newParameterizedType(SeasonResponse::class.java))
 
-                    if (body != null) {
-                        val jsonAdapter: JsonAdapter<List<GenreDto>> = Moshi.Builder().build()
-                            .adapter(Types.newParameterizedType(List::class.java, GenreDto::class.java))
-                        val response = jsonAdapter.fromJson(body.source())
-                        if (response != null) {
-                            continuation.resume(response)
-                        } else {
-                            continuation.resumeWithException(NetworkError.UnknownError("Failed to parse genres"))
-                        }
-                    } else {
-                        continuation.resumeWithException(NetworkError.UnknownError("Empty response body"))
-                    }
-                }
-
-                override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(NetworkError.NoInternetConnection())
-                }
-            })
-        }
+        return performRequest(request, jsonAdapter)
     }
 }

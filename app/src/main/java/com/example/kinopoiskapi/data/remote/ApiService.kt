@@ -13,6 +13,8 @@ interface ApiService {
     ): MoviesResponse
 
     suspend fun getGenres(): List<GenreDto>
+
+    suspend fun getSeasonsNum(serialId: Int): SeasonResponse
 }
 
 
