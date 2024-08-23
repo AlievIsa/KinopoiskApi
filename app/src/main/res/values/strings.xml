@@ -7,7 +7,7 @@
     <string name="search_history">Search history:</string>
     <string name="delete_all">Delete all</string>
     <string name="no_result">No result</string>
-    <string name="no_internet_connection">No internet connection.\nPlease check your network.</string>
+    <string name="no_internet_connection">No internet connection\nPlease check your network</string>
     <string name="server_error">Server error %1$s: %2$s</string>
     <string name="unexpected_error">Unexpected error: %1$s</string>
     <string name="unknown_error_occurred">Unknown error occurred.</string>
