@@ -37,7 +37,8 @@ fun MovieDto.toMovieEntity(query: String): MovieEntity {
         isSeries = isSeries,
         rating = rating?.toRatingEntity(),
         votes = votes?.toVotesEntity(),
-        genre = firstGenre,
+        firstGenre = firstGenre,
+        secondGenre = secondGenre,
         country = firstCountry
     )
 }
@@ -60,7 +61,8 @@ fun MovieEntity.toMovie(): Movie {
         isSeries = isSeries,
         rating = rating?.toRating(),
         votes = votes?.toVotes(),
-        genre = genre,
+        firstGenre = firstGenre,
+        secondGenre = secondGenre,
         country = country
     )
 }

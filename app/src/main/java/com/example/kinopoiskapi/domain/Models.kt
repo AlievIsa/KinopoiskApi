@@ -17,7 +17,8 @@ data class Movie(
     val isSeries: Boolean? = null,
     val rating: Rating? = null,
     val votes: Votes? = null,
-    val genre: String? = null,
+    val firstGenre: String? = null,
+    val secondGenre: String? = null,
     val country: String? = null
 )
 

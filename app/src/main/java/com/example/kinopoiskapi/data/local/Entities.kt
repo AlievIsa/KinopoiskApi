@@ -24,7 +24,8 @@ data class MovieEntity(
     val isSeries: Boolean?,
     @Embedded(prefix = "rating_") val rating: RatingEntity?,
     @Embedded(prefix = "votes_") val votes: VotesEntity?,
-    val genre: String?,
+    val firstGenre: String?,
+    val secondGenre: String?,
     val country: String?
 )
 

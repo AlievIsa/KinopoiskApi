@@ -30,6 +30,9 @@ data class MovieDto(
     val firstGenre: String?
         get() = genres?.firstOrNull()?.name
 
+    val secondGenre: String?
+        get() = if (genres != null && genres.size > 1) genres.elementAt(1).name else null
+
     val firstCountry: String?
         get() = countries?.firstOrNull()?.name
 }
@@ -63,3 +66,10 @@ data class CountryDto(
     val name: String?
 )
 
+data class SeasonResponse(
+    val docs: List<Any>,
+    val total: Int,
+    val limit: Int,
+    val page: Int,
+    val pages: Int
+)
