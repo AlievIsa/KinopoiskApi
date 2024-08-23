@@ -24,7 +24,7 @@
 При прокрутке автоматически прогружаются фильмы.
 Если отсутсвует сеть, фильмы подгружаются из памяти устройства.
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/3ff2bd7b-85b2-45cc-b6de-ac11581b380d" alt="Главный экран и экран фильма">
+  <img src="https://github.com/user-attachments/assets/3ff2bd7b-85b2-45cc-b6de-ac11581b380d" alt="Главный экран и экран фильма" width="60%">
 </p>
 
 ### Поиск
@@ -34,7 +34,7 @@
 Когда вводится запрос, начинают подгружаться подходящие фильмы с задержкой в полсекунды.
 Чтобы отобразился весь список фильмов, необходимо совершить поиск.
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/399c1298-c3df-496a-b1a6-3c0b0064e671" alt="Поиска">
+  <img src="https://github.com/user-attachments/assets/399c1298-c3df-496a-b1a6-3c0b0064e671" alt="Поиска" width="60%">
 </p>
 
 ### Фильтры
@@ -42,11 +42,11 @@
 Также с помощью двайного ползунка можно отрегулировать рейтинг.
 Фильтры пожно сбросить по кнопке.
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/d78b1ab9-c734-43db-a028-34efc429784d" alt="Фильтры">
+  <img src="https://github.com/user-attachments/assets/d78b1ab9-c734-43db-a028-34efc429784d" alt="Фильтры" width="60%">
 </p>
 
 ### Фильмы по фильтрам и по поиску 
 Так фильмы отображаются по фильтрам и по названию.
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/4789d1b0-4631-4aa5-b524-7ab805214c2e" alt="Фильмы по фильтрам и по поиску">
+  <img src="https://github.com/user-attachments/assets/4789d1b0-4631-4aa5-b524-7ab805214c2e" alt="Фильмы по фильтрам и по поиску" width="60%">
 </p>
