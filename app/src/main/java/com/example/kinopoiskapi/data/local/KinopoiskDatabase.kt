@@ -9,7 +9,7 @@ import com.example.kinopoiskapi.data.local.daos.SearchQueryDao
 
 @Database(
     entities = [MovieEntity::class, RemoteKey::class, SearchQueryEntity::class, GenreEntity::class],
-    version = 7
+    version = 8
 )
 abstract class KinopoiskDatabase: RoomDatabase() {
 
