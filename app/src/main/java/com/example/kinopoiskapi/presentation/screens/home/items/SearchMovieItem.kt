@@ -15,12 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.kinopoiskapi.domain.Movie
 import com.example.kinopoiskapi.presentation.ui.theme.Green
+import java.util.Locale
 
 @Composable
 fun SearchMovieItem(
@@ -28,7 +28,7 @@ fun SearchMovieItem(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(Color.White),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(0.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -39,7 +39,7 @@ fun SearchMovieItem(
                 movie.poster?.url?.let { imageUrl ->
                     AsyncImage(
                         model = imageUrl,
-                        contentDescription = "Movie Poster",
+                        contentDescription = "Постер",
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -59,23 +59,34 @@ fun SearchMovieItem(
                     )
                     movie.rating?.kp?.let { rating ->
                         Text(
-                            text = "%.1f".format(rating),
+                            text = String.format(Locale.US, "%.1f", rating),
                             color = Green,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
                 Row(modifier = Modifier.padding(top = 4.dp)) {
-                    Text(
-                        text = movie.country.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Text(
-                        text = movie.genre.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
+                    movie.country?.let { country ->
+                        Text(
+                            text = country,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                    movie.firstGenre?.let { genre ->
+                        Text(
+                            text = genre,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                    movie.secondGenre?.let { genre ->
+                        Text(
+                            text = genre,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
                     movie.year?.let { year ->
                         Text(
                             text = year.toString(),

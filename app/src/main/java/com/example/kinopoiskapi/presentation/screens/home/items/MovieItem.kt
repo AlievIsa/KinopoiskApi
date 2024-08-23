@@ -26,6 +26,7 @@ import com.example.kinopoiskapi.domain.Movie
 import com.example.kinopoiskapi.domain.Rating
 import com.example.kinopoiskapi.presentation.ui.theme.Green
 import com.example.kinopoiskapi.presentation.ui.theme.KinopoiskApiTheme
+import java.util.Locale
 
 @Composable
 fun MovieItem(
@@ -33,18 +34,20 @@ fun MovieItem(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(Color.White),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(0.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(
             modifier = Modifier.padding(8.dp)
         ) {
-            Box(modifier = Modifier.width(80.dp).height(100.dp)) {
+            Box(modifier = Modifier
+                .width(80.dp)
+                .height(100.dp)) {
                 movie.poster?.url?.let { imageUrl ->
                     AsyncImage(
                         model = imageUrl,
-                        contentDescription = "Movie Poster",
+                        contentDescription = "Постер",
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -64,32 +67,45 @@ fun MovieItem(
                     )
                     movie.rating?.kp?.let { rating ->
                         Text(
-                            text = "%.1f".format(rating),
+                            text = String.format(Locale.US, "%.1f", rating),
                             color = Green,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
-                movie.shortDescription?.let { description ->
+                val description = movie.shortDescription ?: movie.description
+                description?.let { description ->
                     Text(
                         text = description,
                         maxLines = 2,
                         style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(vertical = 4.dp),
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        color = Color.Gray
                     )
                 }
                 Row(modifier = Modifier.padding(top = 4.dp)) {
-                    Text(
-                        text = movie.country.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Text(
-                        text = movie.genre.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
+                    movie.country?.let { country ->
+                        Text(
+                            text = country,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                    movie.firstGenre?.let { genre ->
+                        Text(
+                            text = genre,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                    movie.secondGenre?.let { genre ->
+                        Text(
+                            text = genre,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
                     movie.year?.let { year ->
                         Text(
                             text = year.toString(),
@@ -118,7 +134,8 @@ fun MovieItemPreview() {
                     kp = 8.1
                 ),
                 country = "США",
-                genre = "Фантастика",
+                firstGenre = "Фантастика",
+                secondGenre = "Боевик",
                 year = 2018
             ))
     }

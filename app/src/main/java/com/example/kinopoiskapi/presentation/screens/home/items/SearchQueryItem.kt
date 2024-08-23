@@ -56,7 +56,7 @@ fun SearchQueryItem(
             Icon(
                 modifier = Modifier.padding(end = 8.dp),
                 imageVector = Icons.Default.History,
-                contentDescription = "History Icon"
+                contentDescription = "История"
             )
             Text(
                 modifier = Modifier
